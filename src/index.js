@@ -1,4 +1,5 @@
-const mediaFile = require('./media.js')
+const bowser = require('bowser')
+const { withSound, withoutSound } = require('./media.js')
 
 // Detect iOS browsers < version 10
 const oldIOS = typeof navigator !== 'undefined' && parseFloat(
@@ -16,7 +17,13 @@ class NoSleep {
 
       this.noSleepVideo.setAttribute('title', 'No Sleep')
       this.noSleepVideo.setAttribute('playsinline', '')
-      this.noSleepVideo.setAttribute('src', mediaFile)
+
+      // Only Safari requires sound on the video
+      if (bowser.safari) {
+        this.noSleepVideo.setAttribute('src', withSound)
+      } else {
+        this.noSleepVideo.setAttribute('src', withoutSound)
+      }
 
       this.noSleepVideo.addEventListener('timeupdate', function (e) {
         if (this.noSleepVideo.currentTime > 0.5) {
